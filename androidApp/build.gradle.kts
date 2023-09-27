@@ -46,4 +46,9 @@ dependencies {
     implementation(Dependencies.AndroidX.Compose.Foundation.foundation)
     implementation(Dependencies.AndroidX.Compose.Material.material)
     implementation(Dependencies.AndroidX.Activity.activityCompose)
+
+    implementation(Dependencies.AndroidX.Core.core)
+    implementation(Dependencies.Io.InsertKoin.koinAndroid)
+
+    implementation(Dependencies.Com.Arkivanov.Decompose.decompose)
 }

@@ -6,6 +6,14 @@ object Versions {
         const val core = "1.10.1"
         const val koinCompose = "1.1.0"
     }
+    object Arkivanov {
+        object MviKotlin {
+            const val mviKotlin = "3.2.1"
+        }
+        object Decompose {
+            const val decompose = "2.1.0"
+        }
+    }
 }
 
 object Dependencies {
@@ -42,6 +50,22 @@ object Dependencies {
             const val koinCore = "$nameSpace:koin-core:${Versions.AndroidX.koin}"
             const val koinAndroid = "$nameSpace:koin-android:${Versions.AndroidX.koin}"
             const val koinCompose = "$nameSpace:koin-compose:${Versions.AndroidX.koinCompose}"
+        }
+    }
+
+    object Com {
+        object Arkivanov {
+            object MviKotlin {
+                private const val nameSpace = "com.arkivanov.mvikotlin"
+                const val mviKotlin = "$nameSpace:mvikotlin:${Versions.Arkivanov.MviKotlin.mviKotlin}"
+                const val mviKotlinMain = "$nameSpace:mvikotlin-main:${Versions.Arkivanov.MviKotlin.mviKotlin}"
+                const val mviKotlinExtensionsCoroutines = "$nameSpace:mvikotlin-extensions-coroutines:${Versions.Arkivanov.MviKotlin.mviKotlin}"
+            }
+            object Decompose {
+                private const val nameSpace = "com.arkivanov.decompose"
+                const val decompose = "$nameSpace:decompose:${Versions.Arkivanov.Decompose.decompose}"
+                const val extensionsCompose = "$nameSpace:extensions-compose-jetbrains:${Versions.Arkivanov.Decompose.decompose}"
+            }
         }
     }
 }

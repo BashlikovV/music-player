@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("kotlin-parcelize")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -13,16 +14,6 @@ kotlin {
             kotlinOptions {
                 jvmTarget = "1.8"
             }
-        }
-    }
-    
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
         }
     }
 
@@ -37,19 +28,31 @@ kotlin {
                     implementation(materialIconsExtended)
                     @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                     implementation(components.resources)
+                    implementation(compose.uiTooling)
+                    implementation(compose.preview)
                 }
 
                 with(Dependencies.Io.InsertKoin) {
                     implementation(koinCore)
                     implementation(koinCompose)
                 }
+
+                with(Dependencies.Com.Arkivanov.MviKotlin) {
+                    implementation(mviKotlin)
+                    implementation(mviKotlinMain)
+                    implementation(mviKotlinExtensionsCoroutines)
+                }
+
+                with(Dependencies.Com.Arkivanov.Decompose) {
+                    implementation(decompose)
+                    implementation(extensionsCompose)
+                }
             }
         }
         val androidMain by getting {
             dependencies {
                 implementation(Dependencies.AndroidX.Core.core)
-                implementation(compose.uiTooling)
-                implementation(compose.preview)
+                implementation(Dependencies.Io.InsertKoin.koinAndroid)
             }
         }
         val commonTest by getting {
