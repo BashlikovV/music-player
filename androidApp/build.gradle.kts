@@ -17,7 +17,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
     packaging {
         resources {
@@ -51,4 +51,6 @@ dependencies {
     implementation(Dependencies.Io.InsertKoin.koinAndroid)
 
     implementation(Dependencies.Com.Arkivanov.Decompose.decompose)
+    implementation(Dependencies.Com.Arkivanov.MviKotlin.mviKotlinMain)
+    implementation(Dependencies.Com.Arkivanov.MviKotlin.mviKotlin)
 }
