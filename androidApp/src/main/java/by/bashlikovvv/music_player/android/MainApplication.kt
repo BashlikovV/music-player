@@ -1,6 +1,8 @@
 package by.bashlikovvv.music_player.android
 
 import android.app.Application
+import by.bashlikovvv.music_player.core.di.androidModule
+import by.bashlikovvv.music_player.tracks.di.tasksModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -14,7 +16,7 @@ class MainApplication : Application() {
         startKoin {
             androidContext(this@MainApplication)
             androidLogger(Level.DEBUG)
-            modules()
+            modules(androidModule() + tasksModule())
         }
     }
 
