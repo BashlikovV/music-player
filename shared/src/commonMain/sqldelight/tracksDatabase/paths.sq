@@ -1,0 +1,23 @@
+CREATE TABLE pathEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    musicDirPath TEXT NOT NULL
+);
+
+insertDirectoryTask:
+INSERT OR REPLACE
+INTO pathEntity(
+    musicDirPath
+) VALUES (?);
+
+deleteDirectoryTask:
+DELETE FROM pathEntity
+WHERE id = :id;
+
+getDirectoriesTask:
+SELECT *
+FROM pathEntity;
+
+updateDirectoryTask:
+UPDATE pathEntity
+SET musicDirPath = :newMusicDirPath
+WHERE id = :id;
