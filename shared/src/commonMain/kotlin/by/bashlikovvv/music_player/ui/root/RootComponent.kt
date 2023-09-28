@@ -1,53 +1,65 @@
 package by.bashlikovvv.music_player.ui.root
 
-import by.bashlikovvv.music_player.tasks.ui.BrowserComponent
+import by.bashlikovvv.music_player.tracks.ui.chooser.DirectoriesChooserComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.model.IRootComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.items
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.arkivanov.essenty.parcelable.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.arkivanov.essenty.parcelable.Parcelize
 
 class RootComponent(
-    componentContext: ComponentContext,
-    private val tasks: (ComponentContext) -> BrowserComponent
-) : ComponentContext by componentContext {
-
-    constructor(
-        componentContext: ComponentContext,
-    ) : this(
-        componentContext = componentContext,
-        tasks = { childContext ->
-            BrowserComponent(componentContext = childContext)
-        }
-    )
+    componentContext: ComponentContext
+) : IRootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
 
-    private val stack = childStack(
-        source = navigation,
-        initialConfiguration = Configuration.Tasks,
-        handleBackButton = true,
-        childFactory = ::createChild
-    )
-
-    val childStack: Value<ChildStack<*, Child>> = stack
+    override val childStack: Value<ChildStack<*, IRootComponent.Child>> =
+        childStack(
+            source = navigation,
+            initialConfiguration = Configuration.Browser,
+            handleBackButton = true,
+            childFactory = ::createChild
+        )
 
     private fun createChild(
         configuration: Configuration,
         componentContext: ComponentContext
-    ): Child =
+    ): IRootComponent.Child =
         when (configuration) {
-            Configuration.Tasks -> Child.Browser(tasks(componentContext))
+            Configuration.Browser -> IRootComponent.Child.ExplorerChild(itemBrowser(componentContext))
+            Configuration.DirectoriesChooser -> IRootComponent.Child.ChooserChild(itemDirectoriesChooser(componentContext))
         }
 
-    private sealed class Configuration : Parcelable {
-        @Parcelize
-        object Tasks : Configuration()
+    private fun itemBrowser(componentContext: ComponentContext): ExplorerComponent {
+        return ExplorerComponent(
+            componentContext = componentContext,
+            storeFactory = DefaultStoreFactory(),
+            onOpenDirectoriesChooser = { navigation.push(Configuration.DirectoriesChooser) },
+            onCloseRequest = { childStack.items.isEmpty() }
+        )
     }
 
-    sealed class Child {
-        data class Browser(val component: BrowserComponent) : Child()
+    private fun itemDirectoriesChooser(componentContext: ComponentContext): DirectoriesChooserComponent {
+        return DirectoriesChooserComponent(
+            componentContext = componentContext,
+            storeFactory = DefaultStoreFactory(),
+            onClose = { navigation.pop() }
+        )
+    }
+
+    private sealed class Configuration: Parcelable {
+        @Parcelize
+        data object Browser : Configuration()
+
+        @Parcelize
+        data object DirectoriesChooser : Configuration()
     }
 }
