@@ -2,6 +2,8 @@ package by.bashlikovvv.music_player.tracks.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import by.bashlikovvv.music_player.core.data.StorageScanner
+import by.bashlikovvv.music_player.tracks.data.mapper.FileToDirectoryMapper
 import by.bashlikovvv.music_player.tracks.data.mapper.PathEntityMapper
 import by.bashlikovvv.music_player.tracks.data.model.DirectoryEntity
 import by.bashlikovvv.music_player.tracks.domain.model.Directory
@@ -48,5 +50,13 @@ class DirectoriesRepositoryImpl(
 
     override suspend fun deleteDirectory(directory: Directory) {
         queries.deleteDirectoryTask(id = directory.id.toLong())
+    }
+
+    override suspend fun scanDevice() {
+        var id = 0
+        val directories = StorageScanner().scanDevice().map {
+            FileToDirectoryMapper(id).toDomain(it).also { id++ }
+        }
+        addDirectories(directories)
     }
 }

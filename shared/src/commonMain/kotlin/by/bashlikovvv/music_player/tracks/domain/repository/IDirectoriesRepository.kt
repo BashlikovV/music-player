@@ -13,4 +13,6 @@ interface IDirectoriesRepository {
     suspend fun addDirectories(directories: List<Directory>)
 
     suspend fun deleteDirectory(directory: Directory)
+
+    suspend fun scanDevice()
 }
