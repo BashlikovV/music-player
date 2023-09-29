@@ -24,6 +24,9 @@ object Versions {
     object KotlinX {
         const val serializationJson = "1.5.1"
     }
+    object BumpTech {
+        const val glide = "1.0.0-beta01"
+    }
 }
 
 object Dependencies {
@@ -83,6 +86,14 @@ object Dependencies {
             object Essenty {
                 private const val nameSpace = "com.arkivanov.essenty"
                 const val lifecycle = "$nameSpace:lifecycle:${Versions.Arkivanov.Essenty.essenty}"
+            }
+        }
+        object Github {
+            object BumpTech {
+                object Glide {
+                    private const val nameSpace = "com.github.bumptech.glide"
+                    const val glideCompose = "$nameSpace:compose:${Versions.BumpTech.glide}"
+                }
             }
         }
     }
