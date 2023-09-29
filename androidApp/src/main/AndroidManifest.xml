@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
     <application
         android:allowBackup="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".MainApplication"
-        android:icon="@android:color/background_dark">
+        android:label="Player"
+        android:icon="@android:color/background_dark"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".MainActivity"
             android:exported="true">

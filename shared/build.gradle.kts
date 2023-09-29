@@ -11,7 +11,7 @@ plugins {
 kotlin {
     targetHierarchy.default()
 
-    android {
+    androidTarget {
         compilations.all {
             kotlinOptions {
                 jvmTarget = "1.8"
@@ -58,6 +58,7 @@ kotlin {
 
                 implementation(Dependencies.Com.Arkivanov.Essenty.lifecycle)
                 implementation(Dependencies.Org.JetBrains.KotlinX.serializationJson)
+                implementation(Dependencies.Com.Github.BumpTech.Glide.glideCompose)
             }
         }
         val androidMain by getting {

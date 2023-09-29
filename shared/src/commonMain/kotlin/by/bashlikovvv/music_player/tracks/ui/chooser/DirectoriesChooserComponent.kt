@@ -6,6 +6,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
 class DirectoriesChooserComponent(
@@ -18,13 +19,12 @@ class DirectoriesChooserComponent(
         DirectoriesStoreFactory(storeFactory).create()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<DirectoriesChooserExplorer.State> = directoriesStore.stateFlow
 
     fun onEvent(event: DirectoriesChooserExplorer.Intent) {
         directoriesStore.accept(event)
     }
 
-    override fun onBackClicked() {
-        onClose.invoke()
-    }
+    override fun onBackClicked() { onClose.invoke() }
 }
