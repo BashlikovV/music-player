@@ -1,8 +1,7 @@
 package by.bashlikovvv.music_player.tracks.ui.explorer.store
 
-import by.bashlikovvv.music_player.tracks.domain.model.Directory
+import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.domain.model.Track
-import by.bashlikovvv.music_player.tracks.domain.repository.IDirectoriesRepository
 import by.bashlikovvv.music_player.tracks.domain.repository.ITracksRepository
 import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -20,8 +19,6 @@ class MusicStoreFactory(
     private val storeFactory: StoreFactory
 ) : KoinComponent {
 
-    private val directoriesRepository: IDirectoriesRepository by inject()
-
     private val tracksRepository: ITracksRepository by inject()
 
     fun create(): MusicExplorer =
@@ -38,6 +35,13 @@ class MusicStoreFactory(
         data class TracksLoaded(val tracks: List<Track>) : Msg()
 
         data class IsTracksIsEmpty(val value: Boolean) : Msg()
+
+        data class TrackSelected(val track: Track) : Msg()
+
+        data class UpdateVisibilityChanged(val updateVisibility: Boolean) : Msg()
+
+        data object IncrementLimit : Msg()
+
     }
 
     private inner class ExecutorImpl :
@@ -49,58 +53,59 @@ class MusicStoreFactory(
                 getState: () -> MusicExplorer.State
             ) {
                 when(intent) {
-                    is MusicExplorer.Intent.OnAddDirectory -> addDirectory(intent.directory)
-                    is MusicExplorer.Intent.OnDeleteDirectory -> deleteDirectory(intent.directory)
-                    is MusicExplorer.Intent.OnUpdateDirectory -> updateDirectory(intent.directory)
                     is MusicExplorer.Intent.OnSetIsTracksEmpty -> dispatch(
-                        Msg.IsTracksIsEmpty(
-                            intent.value
-                        )
+                        Msg.IsTracksIsEmpty(value = intent.value)
                     )
+                    is MusicExplorer.Intent.OnSelectTrack -> selectTrack(track = intent.track)
+                    is MusicExplorer.Intent.OnLoadBottomTracks -> loadTracks(
+                        limit = getState().limit,
+                        offset = intent.offset
+                    ) { Msg.IncrementLimit }
                 }
             }
 
             override fun executeAction(action: Action, getState: () -> MusicExplorer.State) {
-                when(action) {
+                when (action) {
                     is Action.LoadTracks -> loadTracks(action.limit, action.offset)
                 }
             }
 
-            private fun updateDirectory(directory: Directory) {
-                scope.launch { directoriesRepository.updateDirectory(directory) }
-            }
-
-            private fun addDirectory(directory: Directory) {
-                scope.launch { directoriesRepository.addDirectories(listOf(directory)) }
-            }
-
-            private fun deleteDirectory(directory: Directory) {
-                scope.launch { directoriesRepository.deleteDirectory(directory) }
-            }
-
-            private fun loadTracks(limit: Int, offset: Int) {
+            private fun loadTracks(
+                limit: Int,
+                offset: Int,
+                dispatchSuccessMessage: ((List<Track>) -> Msg)? = null
+            ) {
                 scope.launch {
+                    dispatch(Msg.UpdateVisibilityChanged(true))
                     val tracks = tracksRepository.loadTracks(limit, offset)
                     tracks.collectLatest {
                         if (it.isNotEmpty()) {
                             dispatch(Msg.TracksLoaded(it))
+                            if (dispatchSuccessMessage != null) {
+                                dispatch(dispatchSuccessMessage(it))
+                            }
                         } else {
                             dispatch(Msg.IsTracksIsEmpty(true))
                         }
                     }
-                }
+                }.invokeOnCompletion { dispatch(Msg.UpdateVisibilityChanged(false)) }
             }
+
+            private fun selectTrack(track: Track) { dispatch(Msg.TrackSelected(track)) }
         }
 
     private object ReducerImpl : Reducer<MusicExplorer.State, Msg> {
         override fun MusicExplorer.State.reduce(msg: Msg): MusicExplorer.State = when (msg) {
-            is Msg.TracksLoaded -> copy(tracks = msg.tracks, isTracksEmpty = false)
+            is Msg.TracksLoaded -> copy(tracks = this.tracks + msg.tracks, isTracksEmpty = false, updateVisibility = false)
             is Msg.IsTracksIsEmpty -> copy(isTracksEmpty = msg.value)
+            is Msg.TrackSelected -> copy(currentTrackIdx = msg.track.id)
+            is Msg.UpdateVisibilityChanged -> copy(updateVisibility = msg.updateVisibility)
+            is Msg.IncrementLimit -> copy(limit = limit + Constants.PAGE_SIZE)
         }
     }
 
     sealed class Action {
-        class LoadTracks(val limit: Int = 0, val offset: Int = 30) : Action()
+        class LoadTracks(val limit: Int = 0, val offset: Int = Constants.PAGE_SIZE) : Action()
     }
 
     companion object {
