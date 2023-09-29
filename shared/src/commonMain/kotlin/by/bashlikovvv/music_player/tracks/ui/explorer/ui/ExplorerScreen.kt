@@ -64,7 +64,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.layoutId
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import by.bashlikovvv.music_player.R
 import by.bashlikovvv.music_player.tracks.domain.model.Track
 import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
