@@ -4,6 +4,4 @@ interface IItemExplorer {
 
     fun onOpenDirectoriesChooser()
 
-    fun onCloseRequest(): Boolean
-
 }
