@@ -8,6 +8,8 @@ interface DirectoriesChooserExplorer :
 
     sealed class Intent {
         data class OnAddDirectories(val directory: Directory): Intent()
+
+        data object OnStartDeviceScanning : Intent()
     }
 
     data class State(val directories: List<Directory> = emptyList())
