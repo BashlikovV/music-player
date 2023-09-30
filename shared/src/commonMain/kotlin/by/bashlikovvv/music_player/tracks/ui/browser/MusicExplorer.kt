@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.explorer
+package by.bashlikovvv.music_player.tracks.ui.browser
 
 import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.domain.model.Track

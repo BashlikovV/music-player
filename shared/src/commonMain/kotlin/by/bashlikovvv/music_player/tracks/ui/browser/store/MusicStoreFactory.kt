@@ -1,10 +1,10 @@
-package by.bashlikovvv.music_player.tracks.ui.explorer.store
+package by.bashlikovvv.music_player.tracks.ui.browser.store
 
 import by.bashlikovvv.music_player.core.data.AudioPlayer
 import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.domain.model.Track
 import by.bashlikovvv.music_player.tracks.domain.repository.ITracksRepository
-import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store

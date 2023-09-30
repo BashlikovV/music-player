@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.explorer.model
+package by.bashlikovvv.music_player.tracks.ui.browser.model
 
 interface IItemExplorer {
 
