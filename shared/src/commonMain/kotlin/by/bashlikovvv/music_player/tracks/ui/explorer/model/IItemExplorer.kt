@@ -4,4 +4,6 @@ interface IItemExplorer {
 
     fun onOpenDirectoriesChooser()
 
+    fun onOpenSettingsScreen()
+
 }
