@@ -66,6 +66,7 @@ kotlin {
                 implementation(Dependencies.AndroidX.Core.core)
                 implementation(Dependencies.Io.InsertKoin.koinAndroid)
                 implementation(Dependencies.App.Cash.SQLDelight.androidDriver)
+                implementation(Dependencies.Com.Google.Android.Material.material)
             }
         }
         val commonTest by getting {
