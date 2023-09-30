@@ -8,10 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.widget.RemoteViews
-import android.widget.RemoteViews.RemoteView
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import java.nio.channels.Channel
 
 class PlayerForegroundService : Service() {
 
