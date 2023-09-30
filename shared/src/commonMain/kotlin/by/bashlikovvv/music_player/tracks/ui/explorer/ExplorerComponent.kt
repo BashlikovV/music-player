@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 class ExplorerComponent(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
-    private val onOpenDirectoriesChooser: () -> Unit
+    private val onOpenDirectoriesChooser: () -> Unit,
+    private val onOpenSettingsScreen: () -> Unit
 ) : IItemExplorer, ComponentContext by componentContext {
 
     private val musicStore = instanceKeeper.getStore {
@@ -27,4 +28,5 @@ class ExplorerComponent(
     }
 
     override fun onOpenDirectoriesChooser() { onOpenDirectoriesChooser.invoke() }
+    override fun onOpenSettingsScreen() { onOpenSettingsScreen.invoke() }
 }
