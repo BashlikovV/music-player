@@ -53,4 +53,5 @@ dependencies {
     implementation(Dependencies.Com.Arkivanov.Decompose.decompose)
     implementation(Dependencies.Com.Arkivanov.MviKotlin.mviKotlinMain)
     implementation(Dependencies.Com.Arkivanov.MviKotlin.mviKotlin)
+    implementation(Dependencies.Com.Google.Android.Material.material)
 }
