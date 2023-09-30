@@ -30,18 +30,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
-import androidx.compose.material.Icon
-import androidx.compose.material.TextField
-import androidx.compose.material3.Button
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Slider
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,9 +56,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -70,6 +74,8 @@ import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
 import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,18 +86,20 @@ fun BrowserScreen(
     var skipPartiallyExpanded by remember { mutableStateOf(true) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     val lazyListState = rememberLazyListState().apply { AddObserver(component) }
+    var dropdownMenuState by remember { mutableStateOf(false) }
     val state by component.state.collectAsState()
 
     EmptyTracksAlertDialog(component)
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { BrowserScreenTopBar() }
+        topBar = { BrowserScreenTopBar { dropdownMenuState = !dropdownMenuState } }
     ) { innerPadding ->
         Box(
             modifier = Modifier.fillMaxSize().padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
+            ExplorerScreenDropdownMenu(component, dropdownMenuState) { dropdownMenuState = false }
             LazyColumn(state = lazyListState) {
                 items(state.tracks) { track ->
                     BrowserScreenMusicItem(track) {
@@ -113,8 +121,30 @@ fun BrowserScreen(
                 sheetState = sheetState,
                 modifier = Modifier.fillMaxSize()
             ) {
-                ModalBottomSheetContent(state) { openBottomSheet = false }
+                ModalBottomSheetContent(state, component)
             }
+        }
+    }
+}
+
+@Composable
+private fun ExplorerScreenDropdownMenu(
+    component: ExplorerComponent,
+    expanded: Boolean,
+    onDismissRequest: () -> Unit
+) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { onDismissRequest() },
+        offset = DpOffset(
+            x = 0.dp,
+            y = 50.dp
+        )
+    ) {
+        DropdownMenuItem(
+            onClick = { component.onOpenSettingsScreen() }
+        ) {
+            Text("Settings")
         }
     }
 }
@@ -163,7 +193,12 @@ private fun BrowserScreenMusicItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(0.8f)
         ) {
-            Text(track.fileName)
+            Text(
+                text = track.fileName,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
         Row(
             horizontalArrangement = Arrangement.End,
@@ -172,8 +207,8 @@ private fun BrowserScreenMusicItem(
         ) {
             IconButton(onClick = {  }) {
                 Image(
-                    painter = painterResource(R.drawable.menu),
-                    contentDescription = "tap to open menu",
+                    painter = painterResource(R.drawable.more_vert),
+                    contentDescription = "tap to open more",
                     modifier = Modifier.size(25.dp)
                 )
             }
@@ -182,27 +217,40 @@ private fun BrowserScreenMusicItem(
 }
 
 @Composable
-private fun BrowserScreenTopBar() {
+private fun BrowserScreenTopBar(
+    onOpenDropdownMenu: () -> Unit
+) {
     var isSearchClicked by rememberSaveable { mutableStateOf(false) }
     val searchContentFraction by animateFloatAsState(
         if (isSearchClicked) {
-            0.9f
+            0.85f
         } else {
             0f
         }, label = ""
     )
+    var textFieldValue by rememberSaveable { mutableStateOf("") }
 
     Row(
         modifier = Modifier.fillMaxWidth().height(50.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("Player")
+        Text(
+            text = "Player",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(start = 5.dp)
+        )
         Row {
             TextField(
-                value = "",
-                onValueChange = {},
-                modifier = Modifier.fillMaxWidth(searchContentFraction)
+                value = textFieldValue,
+                onValueChange = { textFieldValue = it },
+                modifier = Modifier.fillMaxWidth(searchContentFraction),
+                textStyle = MaterialTheme.typography.bodyLarge,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
+                singleLine = true
             )
             IconButton(onClick = { isSearchClicked = !isSearchClicked }) {
                 Image(
@@ -212,7 +260,7 @@ private fun BrowserScreenTopBar() {
                 )
             }
             AnimatedVisibility(!isSearchClicked) {
-                IconButton(onClick = {  }) {
+                IconButton(onClick = { onOpenDropdownMenu() }) {
                     Image(
                         painter = painterResource(R.drawable.menu),
                         contentDescription = "tap to open menu",
@@ -323,7 +371,6 @@ private fun modalBottomSheetCS(): ConstraintSet {
         constrain(sheetTopBar) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            top.linkTo(parent.top)
         }
         constrain(imagesList) {
             top.linkTo(sheetTopBar.bottom)
@@ -348,7 +395,7 @@ private fun modalBottomSheetCS(): ConstraintSet {
 @Composable
 private fun ModalBottomSheetContent(
     state: MusicExplorer.State,
-    onDismissRequest: () -> Unit
+    component: ExplorerComponent
 ) {
     val lazyListState = rememberLazyListState()
     val snapFlingBehavior = rememberSnapFlingBehavior(lazyListState)
@@ -358,10 +405,10 @@ private fun ModalBottomSheetContent(
             constraintSet = modalBottomSheetCS(),
             modifier = Modifier.fillMaxSize().padding(horizontal = 15.dp)
         ) {
-            ModalBottomSheetTopBar(onDismissRequest)
+            ModalBottomSheetTopBar()
             ModalBottomSheetImagesList(lazyListState, snapFlingBehavior, state)
-            ModalBottomSheetMusicControlButtons()
-            ModalBottomSheetMusicIndicators()
+            ModalBottomSheetMusicControlButtons(component)
+            ModalBottomSheetMusicIndicators(component)
         }
     }
 }
@@ -373,8 +420,7 @@ private fun ModalBottomSheetImagesList(
     snapFlingBehavior: FlingBehavior,
     state: MusicExplorer.State
 ) {
-    val track = state.tracks.getOrNull(state.currentTrackIdx)
-    track ?: return
+    val track = state.currentTrack
 
     Column(
         modifier = Modifier.fillMaxWidth().layoutId("imagesList"),
@@ -412,36 +458,31 @@ private fun ModalBottomSheetImagesList(
 }
 
 @Composable
-private fun ModalBottomSheetTopBar(onDismissRequest: () -> Unit) {
+private fun ModalBottomSheetTopBar() {
     Row(
         modifier = Modifier.fillMaxWidth().height(50.dp).layoutId("sheetTopBar"),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Button(onClick = onDismissRequest) {
-            Text("back")
-        }
-        Button(onClick = {  }) {
-            Text("Like")
-        }
+
     }
 }
 
 @Composable
-private fun ModalBottomSheetMusicControlButtons() {
-    var playButtonImage by rememberSaveable { mutableStateOf(false) }
+private fun ModalBottomSheetMusicControlButtons(component: ExplorerComponent) {
+    val state by component.state.collectAsState()
     val playImageState by animateIntAsState(
-        if (playButtonImage) {
-            R.drawable.play_arrow
-        } else {
+        if (state.isPlaying) {
             R.drawable.pause
+        } else {
+            R.drawable.play_arrow
         }, label = ""
     )
     val playRoundState by animateDpAsState(
-        if (playButtonImage) {
-            25.dp
-        } else {
+        if (state.isPlaying) {
             10.dp
+        } else {
+            25.dp
         }, label = ""
     )
 
@@ -449,27 +490,45 @@ private fun ModalBottomSheetMusicControlButtons() {
         modifier = Modifier.fillMaxWidth().layoutId("controlButtons"),
         horizontalArrangement = Arrangement.Center
     ) {
-        IconButton(onClick = {  }) {
-            Icon(
+        IconButton(onClick = {
+            component.onEvent(MusicExplorer.Intent.OnSelectTrack(
+                state.tracks[if (state.tracks.indexOf(state.currentTrack) == 0) {
+                    state.tracks.lastIndex
+                } else {
+                    state.tracks.indexOf(state.currentTrack) - 1
+                }]
+            ))
+            component.onEvent(MusicExplorer.Intent.OnPlayTrack)
+        }) {
+            Image(
                 painter = painterResource(R.drawable.skip_previous),
                 contentDescription = "skip previous",
                 modifier = Modifier.size(50.dp)
             )
         }
         IconButton(
-            onClick = { playButtonImage = !playButtonImage },
-            modifier = Modifier
-                .clip(RoundedCornerShape(playRoundState))
-
+            onClick = {
+                component.onEvent(MusicExplorer.Intent.OnPlayTrack)
+            },
+            modifier = Modifier.clip(RoundedCornerShape(playRoundState)).background(MaterialTheme.colorScheme.primary)
         ) {
-            Icon(
+            Image(
                 painter = painterResource(playImageState),
-                contentDescription = if (playButtonImage) { "start playing" } else { "stop playing" },
+                contentDescription = if (state.isPlaying) { "start playing" } else { "stop playing" },
                 modifier = Modifier.size(50.dp)
             )
         }
-        IconButton(onClick = {  }) {
-            Icon(
+        IconButton(onClick = {
+            component.onEvent(MusicExplorer.Intent.OnSelectTrack(
+                state.tracks[if (state.tracks.indexOf(state.currentTrack) == state.tracks.lastIndex) {
+                    0
+                } else {
+                    state.tracks.indexOf(state.currentTrack) + 1
+                }]
+            ))
+            component.onEvent(MusicExplorer.Intent.OnPlayTrack)
+        }) {
+            Image(
                 painter = painterResource(R.drawable.skip_next),
                 contentDescription = "skip next",
                 modifier = Modifier.size(50.dp)
@@ -479,11 +538,35 @@ private fun ModalBottomSheetMusicControlButtons() {
 }
 
 @Composable
-private fun ModalBottomSheetMusicIndicators() {
-    Row(
+private fun ModalBottomSheetMusicIndicators(component: ExplorerComponent) {
+    val state by component.state.collectAsState()
+    val valueRange = 0f..180f
+    var value = state.currentTime
+    val minutes = value / 60f
+    val seconds = round(value % 60)
+
+    Column(
         modifier = Modifier.fillMaxWidth().layoutId("musicIndicators"),
-        horizontalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LinearProgressIndicator()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Slider(
+                value = value,
+                onValueChange = { value = it },
+                valueRange = valueRange
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Text("${minutes.roundToInt()}:${seconds}")
+            Text(valueRange.endInclusive.toString())
+        }
     }
 }
