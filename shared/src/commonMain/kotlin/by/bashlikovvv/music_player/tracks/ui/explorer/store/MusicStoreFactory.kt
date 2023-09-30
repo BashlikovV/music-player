@@ -1,5 +1,6 @@
 package by.bashlikovvv.music_player.tracks.ui.explorer.store
 
+import by.bashlikovvv.music_player.core.data.AudioPlayer
 import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.domain.model.Track
 import by.bashlikovvv.music_player.tracks.domain.repository.ITracksRepository
@@ -21,6 +22,8 @@ class MusicStoreFactory(
 
     private val tracksRepository: ITracksRepository by inject()
 
+    private val audioPlayer: AudioPlayer by inject()
+
     fun create(): MusicExplorer =
         object : MusicExplorer,
             Store<MusicExplorer.Intent, MusicExplorer.State, Nothing> by storeFactory.create(
@@ -28,8 +31,8 @@ class MusicStoreFactory(
                 initialState = MusicExplorer.State(),
                 bootstrapper = SimpleBootstrapper(Action.LoadTracks()),
                 executorFactory = ::ExecutorImpl,
-                reducer = ReducerImpl
-            ) {}
+                reducer = ReducerImpl()
+            ) {  }
 
     private sealed class Msg {
         data class TracksLoaded(val tracks: List<Track>) : Msg()
@@ -37,6 +40,8 @@ class MusicStoreFactory(
         data class IsTracksIsEmpty(val value: Boolean) : Msg()
 
         data class TrackSelected(val track: Track) : Msg()
+
+        data object TrackPlayed : Msg()
 
         data class UpdateVisibilityChanged(val updateVisibility: Boolean) : Msg()
 
@@ -61,6 +66,7 @@ class MusicStoreFactory(
                         limit = getState().limit,
                         offset = intent.offset
                     ) { Msg.IncrementLimit }
+                    is MusicExplorer.Intent.OnPlayTrack -> playTrack()
                 }
             }
 
@@ -92,15 +98,37 @@ class MusicStoreFactory(
             }
 
             private fun selectTrack(track: Track) { dispatch(Msg.TrackSelected(track)) }
+
+            private fun playTrack() { dispatch(Msg.TrackPlayed) }
         }
 
-    private object ReducerImpl : Reducer<MusicExplorer.State, Msg> {
+    private inner class ReducerImpl : Reducer<MusicExplorer.State, Msg> {
         override fun MusicExplorer.State.reduce(msg: Msg): MusicExplorer.State = when (msg) {
             is Msg.TracksLoaded -> copy(tracks = this.tracks + msg.tracks, isTracksEmpty = false, updateVisibility = false)
             is Msg.IsTracksIsEmpty -> copy(isTracksEmpty = msg.value)
-            is Msg.TrackSelected -> copy(currentTrackIdx = msg.track.id)
+            is Msg.TrackSelected -> onTrackSelected(msg)
+            is Msg.TrackPlayed -> onTrackPlayed()
             is Msg.UpdateVisibilityChanged -> copy(updateVisibility = msg.updateVisibility)
             is Msg.IncrementLimit -> copy(limit = limit + Constants.PAGE_SIZE)
+        }
+
+        private fun MusicExplorer.State.onTrackSelected(msg: Msg.TrackSelected): MusicExplorer.State {
+            audioPlayer.preparePlayer(
+                path = msg.track.trackFilePath,
+                filename = msg.track.fileName
+            )
+
+            return copy(currentTrack = msg.track, isPlaying = false)
+        }
+
+        private fun MusicExplorer.State.onTrackPlayed(): MusicExplorer.State {
+            return if (audioPlayer.mediaPlayer?.isPlaying == true) {
+                audioPlayer.pauseCurrentMedia()
+                copy(isPlaying = false)
+            } else {
+                audioPlayer.playCurrentMedia()
+                copy(isPlaying = true)
+            }
         }
     }
 
