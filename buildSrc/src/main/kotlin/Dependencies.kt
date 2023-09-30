@@ -27,6 +27,9 @@ object Versions {
     object BumpTech {
         const val glide = "1.0.0-beta01"
     }
+    object Material {
+        const val material = "1.3.0"
+    }
 }
 
 object Dependencies {
@@ -93,6 +96,14 @@ object Dependencies {
                 object Glide {
                     private const val nameSpace = "com.github.bumptech.glide"
                     const val glideCompose = "$nameSpace:compose:${Versions.BumpTech.glide}"
+                }
+            }
+        }
+        object Google {
+            object Android {
+                object Material {
+                    private const val nameSpace = "com.google.android.material"
+                    const val material = "$nameSpace:material:${Versions.Material.material}"
                 }
             }
         }

@@ -1,5 +1,6 @@
 package by.bashlikovvv.music_player.core.data
 
+import android.media.AudioAttributes
 import android.media.MediaPlayer
 import by.bashlikovvv.music_player.core.exception.MediaPlayerNotFoundException
 import by.bashlikovvv.music_player.core.exception.MediaPlayerNotPreparedException
@@ -11,7 +12,7 @@ import java.io.IOException
 actual class AudioPlayer {
 
     private var _mediaPlayer: MediaPlayer? = null
-    val mediaPlayer = _mediaPlayer
+    val mediaPlayer get() = _mediaPlayer
 
     /**
      * @throws MediaPlayerNotFoundException
@@ -20,7 +21,14 @@ actual class AudioPlayer {
         if (_mediaPlayer != null) {
             _mediaPlayer!!.reset()
         } else {
-            _mediaPlayer = MediaPlayer()
+            _mediaPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+                )
+            }
         }
 
         try {
