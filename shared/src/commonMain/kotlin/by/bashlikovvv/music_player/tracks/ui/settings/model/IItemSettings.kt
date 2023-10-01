@@ -4,4 +4,6 @@ interface IItemSettings {
 
     fun onBackClicked()
 
+    fun onOpenDirectoriesChooser()
+
 }
