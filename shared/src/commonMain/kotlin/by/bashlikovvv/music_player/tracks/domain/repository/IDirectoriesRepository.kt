@@ -15,4 +15,6 @@ interface IDirectoriesRepository {
     suspend fun deleteDirectory(directory: Directory)
 
     suspend fun scanDevice()
+
+    suspend fun clearDirectories()
 }
