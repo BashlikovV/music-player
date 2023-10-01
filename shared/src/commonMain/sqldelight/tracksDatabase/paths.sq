@@ -21,3 +21,6 @@ updateDirectoryTask:
 UPDATE pathEntity
 SET musicDirPath = :newMusicDirPath
 WHERE id = :id;
+
+clearDirectoriesTask:
+DELETE FROM pathEntity;

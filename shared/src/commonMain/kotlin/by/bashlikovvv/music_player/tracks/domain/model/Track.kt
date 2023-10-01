@@ -6,4 +6,10 @@ data class Track(
     val fileName: String = "",
     val imageFilePath: String? = "",
     val isCurrent: Boolean = false
-)
+) {
+
+    fun getTrackName() = fileName.substringAfter('-').substringBeforeLast(".")
+
+    fun getMusician() = fileName.substringBefore('-')
+
+}

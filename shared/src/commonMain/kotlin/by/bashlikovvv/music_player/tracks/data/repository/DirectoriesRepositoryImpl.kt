@@ -57,6 +57,11 @@ class DirectoriesRepositoryImpl(
         val directories = StorageScanner().scanDevice().map {
             FileToDirectoryMapper(id).toDomain(it).also { id++ }
         }
+        clearDirectories()
         addDirectories(directories)
+    }
+
+    override suspend fun clearDirectories() {
+        queries.clearDirectoriesTask()
     }
 }
