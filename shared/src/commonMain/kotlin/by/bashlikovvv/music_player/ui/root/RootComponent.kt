@@ -60,7 +60,8 @@ class RootComponent(
         return SettingsComponent(
             componentContext = componentContext,
             storeFactory = DefaultStoreFactory(),
-            onClose = { navigation.pop() }
+            onClose = { navigation.pop() },
+            onOpenDirectoriesChooser = { navigation.push(Configuration.DirectoriesChooser) }
         )
     }
 
