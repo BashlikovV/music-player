@@ -35,6 +35,8 @@ class DirectoriesStoreFactory(
     private sealed class Msg {
 
         data class DirectoriesLoaded(val directories: List<Directory>) : Msg()
+
+        data object ClearDirectories : Msg()
     }
 
     private inner class ExecutorImpl :
@@ -72,6 +74,7 @@ class DirectoriesStoreFactory(
                         val directories = directoryEntities.map {
                             CommonDirectoryEntityMapper().toDomain(it as DirectoryEntity.CommonDirectoryEntity)
                         }
+                        dispatch(Msg.ClearDirectories)
                         dispatch(Msg.DirectoriesLoaded(directories))
                     }
                 }
@@ -82,6 +85,7 @@ class DirectoriesStoreFactory(
         override fun DirectoriesChooserExplorer.State.reduce(msg: Msg): DirectoriesChooserExplorer.State =
             when(msg) {
                 is Msg.DirectoriesLoaded -> copy(directories = msg.directories)
+                is Msg.ClearDirectories -> copy(directories = emptyList())
             }
     }
 
