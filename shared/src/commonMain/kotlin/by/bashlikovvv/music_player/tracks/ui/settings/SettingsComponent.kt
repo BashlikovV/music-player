@@ -7,9 +7,11 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 class SettingsComponent(
     componentContext: ComponentContext,
     storeFactory: StoreFactory,
-    private val onClose: () -> Unit
+    private val onClose: () -> Unit,
+    private val onOpenDirectoriesChooser: () -> Unit
 ) : IItemSettings, ComponentContext by componentContext {
 
     override fun onBackClicked() { onClose.invoke() }
 
+    override fun onOpenDirectoriesChooser() { onOpenDirectoriesChooser.invoke() }
 }
