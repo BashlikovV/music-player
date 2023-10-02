@@ -19,7 +19,7 @@ import by.bashlikovvv.music_player.tracks.ui.chooser.DirectoriesChooserComponent
 @Composable
 fun DirectoriesChooserScreenTopBar(component: DirectoriesChooserComponent) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(50.dp),
+        modifier = Modifier.fillMaxWidth().height(65.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
