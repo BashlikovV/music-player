@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
@@ -20,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
 import by.bashlikovvv.music_player.R
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 
 @Composable
 fun ModalBottomSheetMusicControlButtons(component: ExplorerComponent) {

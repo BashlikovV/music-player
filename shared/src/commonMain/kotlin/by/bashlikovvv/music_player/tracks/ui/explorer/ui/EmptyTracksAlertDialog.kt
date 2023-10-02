@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import by.bashlikovvv.music_player.R
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 
 @Composable
 fun EmptyTracksAlertDialog(component: ExplorerComponent) {

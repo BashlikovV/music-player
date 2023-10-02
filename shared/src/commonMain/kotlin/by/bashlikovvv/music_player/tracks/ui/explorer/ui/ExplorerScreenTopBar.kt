@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,7 +42,7 @@ fun BrowserScreenTopBar(
     var textFieldValue by rememberSaveable { mutableStateOf("") }
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(50.dp),
+        modifier = Modifier.fillMaxWidth().height(65.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -63,19 +64,27 @@ fun BrowserScreenTopBar(
                 singleLine = true
             )
             IconButton(onClick = { isSearchClicked = !isSearchClicked }) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.search),
                     contentDescription = "tap to search tracks",
                     modifier = Modifier.size(25.dp)
                 )
             }
             AnimatedVisibility(!isSearchClicked) {
-                IconButton(onClick = { onOpenDropdownMenu() }) {
-                    Image(
-                        painter = painterResource(R.drawable.menu),
-                        contentDescription = "tap to open menu",
-                        modifier = Modifier.size(25.dp)
-                    )
+                Row {
+                    IconButton(onClick = {  }) {
+                        Icon(
+                            painter = painterResource(R.drawable.queue_music),
+                            contentDescription = "open playlists"
+                        )
+                    }
+                    IconButton(onClick = { onOpenDropdownMenu() }) {
+                        Icon(
+                            painter = painterResource(R.drawable.menu),
+                            contentDescription = "tap to open menu",
+                            modifier = Modifier.size(25.dp)
+                        )
+                    }
                 }
             }
         }

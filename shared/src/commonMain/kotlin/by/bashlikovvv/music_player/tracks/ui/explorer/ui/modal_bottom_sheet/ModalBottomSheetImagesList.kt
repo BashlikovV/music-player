@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet
 
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
 import by.bashlikovvv.music_player.R
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -46,14 +46,14 @@ fun ModalBottomSheetImagesList(
             items(state.tracks) {
                 Card(modifier = Modifier.fillMaxHeight(0.4f)) {
                     GlideImage(
-                        model = track.imageFilePath,
-                        contentDescription = "${track.fileName} image",
+                        model = track.image,
+                        contentDescription = "${track.title} image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxHeight().fillParentMaxWidth()
                     ) {
                         it
                             .error(R.drawable.music_notes)
-                            .load(track.imageFilePath)
+                            .load(track.image)
                     }
                 }
             }
@@ -62,7 +62,7 @@ fun ModalBottomSheetImagesList(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(track.getTrackName() + " - " + track.getMusician())
+            Text(track.title + " - " + track.artist)
         }
     }
 }

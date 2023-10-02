@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
