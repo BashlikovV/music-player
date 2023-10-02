@@ -1,7 +1,7 @@
-package by.bashlikovvv.music_player.tracks.ui.browser
+package by.bashlikovvv.music_player.tracks.ui.explorer
 
-import by.bashlikovvv.music_player.tracks.ui.browser.model.IItemExplorer
-import by.bashlikovvv.music_player.tracks.ui.browser.store.MusicStoreFactory
+import by.bashlikovvv.music_player.tracks.ui.explorer.model.IItemExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.store.MusicStoreFactory
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory

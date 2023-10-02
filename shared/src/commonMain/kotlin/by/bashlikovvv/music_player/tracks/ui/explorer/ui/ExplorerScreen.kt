@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,9 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
-import by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet.ModalBottomSheetContent
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet.ModalBottomSheetContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,10 +57,14 @@ fun BrowserScreen(
             contentAlignment = Alignment.Center
         ) {
             BrowserScreenDropdownMenu(component, dropdownMenuState) { dropdownMenuState = false }
-            LazyColumn(state = lazyListState) {
+            LazyColumn(
+                state = lazyListState,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                item(key = 0) { ExplorerScreenTracksInfo(component) }
                 items(
                     items = state.tracks,
-                    key = { state.tracks.indexOf(it) }
+                    key = { state.tracks.indexOf(it) + 1 }
                 ) { track ->
                     BrowserScreenMusicItem(track, track == state.currentTrack) {
                         if (state.currentTrack != track) {
@@ -70,7 +74,9 @@ fun BrowserScreen(
                     }
                 }
                 if (state.updateVisibility) {
-                    item { CircularProgressIndicator() }
+                    item(key = state.tracks.lastIndex + 2) { CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    ) }
                 }
             }
         }

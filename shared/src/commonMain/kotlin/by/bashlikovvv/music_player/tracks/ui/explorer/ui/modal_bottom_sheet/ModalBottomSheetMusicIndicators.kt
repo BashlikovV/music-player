@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,14 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.constraintlayout.compose.layoutId
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
 import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
 fun ModalBottomSheetMusicIndicators(component: ExplorerComponent) {
     val state by component.state.collectAsState()
-    val valueRange = 0f..180f
+    val valueRange = 0f..state.currentTrack.durationToFloatFormat()
     var value = state.currentTime
     val minutes = value / 60f
     val seconds = round(value % 60)
@@ -45,7 +45,7 @@ fun ModalBottomSheetMusicIndicators(component: ExplorerComponent) {
             verticalAlignment = Alignment.Top
         ) {
             Text("${minutes.roundToInt()}:${seconds}")
-            Text(valueRange.endInclusive.toString())
+            Text(state.currentTrack.durationToStringFormat())
         }
     }
 }

@@ -1,12 +1,13 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
 
 @Composable
 fun BrowserScreenDropdownMenu(
@@ -14,12 +15,14 @@ fun BrowserScreenDropdownMenu(
     expanded: Boolean,
     onDismissRequest: () -> Unit
 ) {
+    val view = LocalView.current
+
     DropdownMenu(
         expanded = expanded,
         onDismissRequest = { onDismissRequest() },
         offset = DpOffset(
-            x = 0.dp,
-            y = 50.dp
+            x = view.width.dp,
+            y = 0.dp
         )
     ) {
         DropdownMenuItem(

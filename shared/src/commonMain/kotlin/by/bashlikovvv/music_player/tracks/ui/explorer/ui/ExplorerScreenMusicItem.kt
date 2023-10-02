@@ -1,9 +1,10 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,14 +42,14 @@ fun BrowserScreenMusicItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(60.dp)
             .background(background)
             .clickable { onClick(track) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         GlideImage(
-            model = track.imageFilePath,
+            model = track.image,
             contentDescription = "${track.fileName} image",
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(50.dp).padding(5.dp),
@@ -56,18 +57,25 @@ fun BrowserScreenMusicItem(
         ) {
             it
                 .error(R.drawable.music_notes)
-                .load(track.imageFilePath)
+                .load(track.image)
         }
-        Row(
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically,
+        Column (
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier.weight(0.8f)
         ) {
             Text(
-                text = track.fileName,
+                text = track.title,
                 style = MaterialTheme.typography.bodyLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = track.artist,
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 5.dp)
             )
         }
         Row(
@@ -75,6 +83,12 @@ fun BrowserScreenMusicItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.weight(0.2f)
         ) {
+            Text(
+                text = track.durationToStringFormat(),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
             IconButton(onClick = {  }) {
                 Image(
                     painter = painterResource(R.drawable.more_vert),

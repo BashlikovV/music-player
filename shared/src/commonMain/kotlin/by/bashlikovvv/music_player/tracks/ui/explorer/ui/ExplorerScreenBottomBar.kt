@@ -1,17 +1,23 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,14 +27,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.layoutId
 import by.bashlikovvv.music_player.R
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun BrowserScreenBottomBar(
     component: ExplorerComponent,
@@ -50,6 +60,12 @@ fun BrowserScreenBottomBar(
         }, label = ""
     )
 
+    Spacer(
+        modifier = Modifier
+            .border(BorderStroke(0.1.dp, MaterialTheme.colorScheme.secondary))
+            .fillMaxWidth()
+            .height(0.2.dp)
+    )
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,26 +74,38 @@ fun BrowserScreenBottomBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        GlideImage(
+            model = state.currentTrack.image,
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.padding(start = 5.dp).size(40.dp)
+        ) {
+            it
+                .error(R.drawable.music_notes)
+                .load(state.currentTrack.image)
+        }
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth(0.6f).padding(start = 5.dp)
         ) {
             Text(
-                text = state.currentTrack.getTrackName(),
+                text = state.currentTrack.title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = state.currentTrack.getMusician(),
+                text = state.currentTrack.artist,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.labelMedium)
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 5.dp)
+            )
         }
         Row(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+            modifier = Modifier.padding(vertical = 5.dp)
         ) {
             IconButton(onClick = {
                 component.onEvent(
@@ -92,7 +120,7 @@ fun BrowserScreenBottomBar(
                     component.onEvent(MusicExplorer.Intent.OnPlayTrack)
                 }
             }) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.skip_previous),
                     contentDescription = "skip previous",
                     modifier = Modifier.size(25.dp)
@@ -100,7 +128,9 @@ fun BrowserScreenBottomBar(
             }
             IconButton(
                 onClick = { component.onEvent(MusicExplorer.Intent.OnPlayTrack) },
-                modifier = Modifier.clip(RoundedCornerShape(playRoundState)).background(MaterialTheme.colorScheme.primary)
+                modifier = Modifier
+                    .clip(RoundedCornerShape(playRoundState))
+                    .background(MaterialTheme.colorScheme.primary)
             ) {
                 Image(
                     painter = painterResource(playImageState),
@@ -121,7 +151,7 @@ fun BrowserScreenBottomBar(
                     component.onEvent(MusicExplorer.Intent.OnPlayTrack)
                 }
             }) {
-                Image(
+                Icon(
                     painter = painterResource(R.drawable.skip_next),
                     contentDescription = "skip next",
                     modifier = Modifier.size(25.dp)

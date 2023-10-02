@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.browser.ui.modal_bottom_sheet
+package by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import by.bashlikovvv.music_player.tracks.ui.browser.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.browser.MusicExplorer
+import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
+import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
