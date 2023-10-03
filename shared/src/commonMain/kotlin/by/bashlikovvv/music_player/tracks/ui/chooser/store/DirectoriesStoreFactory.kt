@@ -37,6 +37,8 @@ class DirectoriesStoreFactory(
         data class DirectoriesLoaded(val directories: List<Directory>) : Msg()
 
         data object ClearDirectories : Msg()
+
+        data class UpdateVisibilityChanged(val updateVisibility: Boolean) : Msg()
     }
 
     private inner class ExecutorImpl :
@@ -68,6 +70,7 @@ class DirectoriesStoreFactory(
 
             private fun startDeviceScanning() {
                 scope.launch {
+                    dispatch(Msg.UpdateVisibilityChanged(true))
                     directoriesRepository.scanDevice()
 
                     directoriesRepository.getDirectories().collectLatest { directoryEntities ->
@@ -84,8 +87,9 @@ class DirectoriesStoreFactory(
     private object ReducerImpl : Reducer<DirectoriesChooserExplorer.State, Msg> {
         override fun DirectoriesChooserExplorer.State.reduce(msg: Msg): DirectoriesChooserExplorer.State =
             when(msg) {
-                is Msg.DirectoriesLoaded -> copy(directories = msg.directories)
+                is Msg.DirectoriesLoaded -> copy(directories = msg.directories, updateVisibility = false)
                 is Msg.ClearDirectories -> copy(directories = emptyList())
+                is Msg.UpdateVisibilityChanged -> copy(updateVisibility = msg.updateVisibility)
             }
     }
 
