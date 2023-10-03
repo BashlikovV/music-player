@@ -1,7 +1,11 @@
 package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
+import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -74,9 +78,13 @@ fun BrowserScreen(
                     }
                 }
                 if (state.updateVisibility) {
-                    item(key = state.tracks.lastIndex + 2) { CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center)
-                    ) }
+                    item(key = state.tracks.lastIndex + 2) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) { CircularProgressIndicator() }
+                    }
                 }
             }
         }
@@ -102,7 +110,9 @@ private fun LazyListState.AddObserver(component: ExplorerComponent) {
     }
 
     LaunchedEffect(endOfListReached) {
-        if (endOfListReached) { component.onEvent(MusicExplorer.Intent.OnLoadBottomTracks()) }
+        if (endOfListReached) {
+            component.onEvent(MusicExplorer.Intent.OnLoadBottomTracks())
+        }
     }
 }
 
