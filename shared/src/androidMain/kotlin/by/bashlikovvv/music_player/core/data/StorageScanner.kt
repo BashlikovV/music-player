@@ -23,7 +23,7 @@ actual class StorageScanner {
 
         val tmp = File(directory.path).listFiles()
         if (tmp != null) {
-            for (i in limit..limit + offset step 1) {
+            for (i in limit until limit + offset step 1) {
                 files.add(tmp.getOrNull(i))
             }
         }

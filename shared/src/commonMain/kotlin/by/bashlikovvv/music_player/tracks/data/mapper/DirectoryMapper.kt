@@ -16,7 +16,6 @@ class DirectoryMapper : Mapper<Directory, Track> {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
     override fun toDomain(entity: Directory): Track {
         val trackInfo = TrackInfo()
         trackInfo.setDataSource(entity.path)
