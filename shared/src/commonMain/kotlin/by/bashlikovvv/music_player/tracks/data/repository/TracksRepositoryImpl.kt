@@ -1,6 +1,7 @@
 package by.bashlikovvv.music_player.tracks.data.repository
 
 import by.bashlikovvv.music_player.core.data.StorageScanner
+import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.data.exception.CanNotDeleteFileException
 import by.bashlikovvv.music_player.tracks.data.mapper.CommonDirectoryEntityMapper
 import by.bashlikovvv.music_player.tracks.data.mapper.DirectoryMapper
@@ -31,19 +32,24 @@ class TracksRepositoryImpl(
             supervisorScope {
                 val tracks = mutableListOf<Track>()
 
-                directoryEntities.map {
-                    async {
-                        storageScanner.scanDirectory(
-                            directory = CommonDirectoryEntityMapper().toDomain(it as DirectoryEntity.CommonDirectoryEntity),
-                            limit = limit,
-                            offset = offset
-                        ).map {
+                directoryEntities.map { directoryEntity ->
+                    val trackFiles = storageScanner.scanDirectory(
+                        directory = CommonDirectoryEntityMapper().toDomain(directoryEntity as DirectoryEntity.CommonDirectoryEntity),
+                        limit = limit,
+                        offset = offset
+                    )
+                    trackFiles.map {
+                        val deferred = async {
                             DirectoryMapper().toDomain(
                                 FileToDirectoryMapper(id).toDomain(it).also { id++ }
                             )
                         }
+                        tracks.add(deferred.await())
                     }
-                }.map { tracks.addAll(it.await()) }
+                    if (tracks.size >= Constants.PAGE_SIZE) {
+                        return@supervisorScope tracks
+                    }
+                }
 
                 tracks
             }
