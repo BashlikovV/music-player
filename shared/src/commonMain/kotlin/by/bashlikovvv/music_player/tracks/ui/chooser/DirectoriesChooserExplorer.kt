@@ -12,6 +12,9 @@ interface DirectoriesChooserExplorer :
         data object OnStartDeviceScanning : Intent()
     }
 
-    data class State(val directories: List<Directory> = emptyList())
+    data class State(
+        val directories: List<Directory> = emptyList(),
+        val updateVisibility: Boolean = true
+    )
 
 }

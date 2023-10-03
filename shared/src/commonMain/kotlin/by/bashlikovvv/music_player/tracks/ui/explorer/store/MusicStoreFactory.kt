@@ -112,6 +112,18 @@ class MusicStoreFactory(
             is Msg.IncrementLimit -> copy(limit = limit + Constants.PAGE_SIZE)
         }
 
+        private operator fun List<Track>.plus(elements: List<Track>): List<Track> {
+            val result = this.toMutableList()
+
+            if (result != elements) {
+                elements.forEach { track ->
+                    result.add(track)
+                }
+            }
+
+            return result
+        }
+
         private fun MusicExplorer.State.onTrackSelected(msg: Msg.TrackSelected): MusicExplorer.State {
             audioPlayer.preparePlayer(
                 path = msg.track.trackFilePath,
