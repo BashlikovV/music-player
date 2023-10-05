@@ -1,4 +1,4 @@
-package by.bashlikovvv.music_player.tracks.ui.model
+ package by.bashlikovvv.music_player.ui.root
 
 import by.bashlikovvv.music_player.tracks.ui.chooser.DirectoriesChooserComponent
 import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent

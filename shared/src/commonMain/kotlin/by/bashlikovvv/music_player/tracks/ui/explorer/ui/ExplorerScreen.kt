@@ -1,6 +1,6 @@
 package by.bashlikovvv.music_player.tracks.ui.explorer.ui
 
-import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import by.bashlikovvv.music_player.core.utils.Constants
 import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
 import by.bashlikovvv.music_player.tracks.ui.explorer.MusicExplorer
 import by.bashlikovvv.music_player.tracks.ui.explorer.ui.modal_bottom_sheet.ModalBottomSheetContent
@@ -49,7 +50,7 @@ fun BrowserScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = { BrowserScreenTopBar { dropdownMenuState = !dropdownMenuState } },
         bottomBar = {
-            if (state.isPlaying || state.currentTrack.id != 0) {
+            AnimatedVisibility(state.isPlaying || state.currentTrack.id != 0) {
                 BrowserScreenBottomBar(component) {
                     openBottomSheet = true
                 }
@@ -77,8 +78,8 @@ fun BrowserScreen(
                         component.onEvent(MusicExplorer.Intent.OnPlayTrack)
                     }
                 }
-                if (state.updateVisibility) {
-                    item(key = state.tracks.lastIndex + 2) {
+                item(key = state.tracks.lastIndex + 2) {
+                    if (state.updateVisibility) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center,
@@ -117,5 +118,9 @@ private fun LazyListState.AddObserver(component: ExplorerComponent) {
 }
 
 private fun LazyListState.isScrolledToEnd(): Boolean {
-    return layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+    val totalCont = layoutInfo.totalItemsCount - 1
+    if (totalCont == 0) { return false }
+    val lastItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index
+
+    return lastItemIndex == totalCont
 }

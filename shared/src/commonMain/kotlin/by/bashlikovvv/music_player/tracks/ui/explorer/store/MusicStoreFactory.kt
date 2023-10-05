@@ -46,7 +46,6 @@ class MusicStoreFactory(
         data class UpdateVisibilityChanged(val updateVisibility: Boolean) : Msg()
 
         data object IncrementLimit : Msg()
-
     }
 
     private inner class ExecutorImpl :
