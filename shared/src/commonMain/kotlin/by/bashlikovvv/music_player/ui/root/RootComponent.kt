@@ -2,7 +2,6 @@ package by.bashlikovvv.music_player.ui.root
 
 import by.bashlikovvv.music_player.tracks.ui.chooser.DirectoriesChooserComponent
 import by.bashlikovvv.music_player.tracks.ui.explorer.ExplorerComponent
-import by.bashlikovvv.music_player.tracks.ui.model.IRootComponent
 import by.bashlikovvv.music_player.tracks.ui.settings.SettingsComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack

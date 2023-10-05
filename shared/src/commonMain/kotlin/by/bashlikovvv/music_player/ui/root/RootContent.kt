@@ -2,7 +2,6 @@ package by.bashlikovvv.music_player.ui.root
 
 import androidx.compose.runtime.Composable
 import by.bashlikovvv.music_player.tracks.ui.explorer.ui.BrowserScreen
-import by.bashlikovvv.music_player.tracks.ui.model.IRootComponent
 import by.bashlikovvv.music_player.tracks.ui.chooser.ui.DirectoriesChooserScreen
 import by.bashlikovvv.music_player.tracks.ui.settings.ui.SettingsScreen
 import com.arkivanov.decompose.extensions.compose.jetbrains.stack.Children
