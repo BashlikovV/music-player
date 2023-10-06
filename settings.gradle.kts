@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "music-player"
 include(":androidApp")
 include(":shared")
+include(":notifications")

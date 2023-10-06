@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:gravity="center_vertical"
+    style="@style/TextAppearance.Compat.Notification.Title">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/trackNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/track_name"
+            android:layout_gravity="start"
+            android:layout_marginBottom="10dp"
+            style="@style/TextAppearance.Compat.Notification.Title"/>
+
+        <TextView
+            android:id="@+id/authorNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/author_name"
+            android:layout_gravity="start"
+            android:layout_marginBottom="10dp"
+            style="@style/TextAppearance.Compat.Notification.Title"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="start"
+            android:layout_marginBottom="10dp" >
+
+            <ImageButton
+                android:id="@+id/skipPreviousBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/skip_previous"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/skip_previous"/>
+
+            <ImageButton
+                android:id="@+id/startStopBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/play_arrow"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/start_or_stop_music" />
+
+            <ImageButton
+                android:id="@+id/skipNextBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/skip_next"
+                android:backgroundTint="@color/transparent"
+                android:contentDescription="@string/skip_next"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="5dp">
+
+            <include
+                android:id="@+id/include"
+                layout="@layout/large_notification_slider_item"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
