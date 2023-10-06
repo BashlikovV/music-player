@@ -14,6 +14,13 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import by.bashlikovvv.notifications.R
+import by.bashlikovvv.notifications.domain.Actions.ACTION_NEXT
+import by.bashlikovvv.notifications.domain.Actions.ACTION_PAUSE
+import by.bashlikovvv.notifications.domain.Actions.ACTION_PLAY
+import by.bashlikovvv.notifications.domain.Actions.ACTION_PREPARE
+import by.bashlikovvv.notifications.domain.Actions.ACTION_PREVIOUS
+import by.bashlikovvv.notifications.domain.Actions.ACTION_SET_TIME
+import by.bashlikovvv.notifications.domain.Actions.KEY_TIME
 
 class ForegroundService : Service() {
 
@@ -78,20 +85,6 @@ class ForegroundService : Service() {
 
     override fun onBind(intent: Intent?): IBinder {
         return LocalBinder()
-    }
-
-    companion object {
-        const val ACTION_PREPARE = "by.bashlikovvv.foregroundtest.PREPARE"
-//        const val KEY_PATH = "pathKey"
-//        const val KEY_FILE_NAME = "fileNameKey"
-
-        const val ACTION_PLAY = "by.bashlikovvv.foregroundtest.PLAY"
-        const val ACTION_PAUSE = "by.bashlikovvv.foregroundtest.PAUSE"
-
-        const val ACTION_NEXT = "by.bashlikovvv.foregroundtest.NEXT"
-        const val ACTION_PREVIOUS = "by.bashlikovvv.foregroundtest.PREVIOUS"
-        const val ACTION_SET_TIME = "by.bashlikovvv.foregroundtest.SET_TIME"
-        const val KEY_TIME = "timeKey"
     }
 
 
