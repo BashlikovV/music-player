@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">foreground test</string>
+    <string name="track_name">track name</string>
+    <string name="author_name">author name</string>
+    <string name="skip_previous">skip previous</string>
+    <string name="start_or_stop_music">start or stop music</string>
+    <string name="skip_next">skip next</string>
+</resources>

@@ -24,9 +24,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="by.bashlikovvv.music_player.core.data.AudioPlayer"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback"
-            android:permission="TODO" />
     </application>
 </manifest> 
