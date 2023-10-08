@@ -40,6 +40,8 @@ android {
 
 dependencies {
     implementation(project(":shared"))
+    implementation(project(":notifications"))
+
     implementation(Dependencies.AndroidX.Compose.Ui.ui)
     implementation(Dependencies.AndroidX.Compose.Ui.uiTooling)
     implementation(Dependencies.AndroidX.Compose.Ui.uiToolingPreview)
