@@ -24,5 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name="by.bashlikovvv.notifications.presentation.ForegroundService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false"/>
+        <receiver android:name="by.bashlikovvv.notifications.data.ActionsBroadcastReceiver" />
     </application>
 </manifest> 
